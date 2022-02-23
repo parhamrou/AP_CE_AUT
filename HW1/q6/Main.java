@@ -7,7 +7,7 @@ public class Main {
 
 		String number = input.nextLine();
 		char[] array = number.toCharArray();
-		Boolean flag = false;
+		boolean flag = false;
 		int i;
 		for (i = array.length - 1; i > 0; i--) {
 			if (array[i-1] < array[i]) {

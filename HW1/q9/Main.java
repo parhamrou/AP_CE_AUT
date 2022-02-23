@@ -23,7 +23,7 @@ public class Main {
 		} else {
 			int twoPow = 0;
 			int counter = 0;
-			Boolean condition = false;
+			boolean condition = false;
 			for (int i = 0; i < array.length; i++) {
 				if (array[i] == '1') {
 					if (counter != oneCounter - 1) {
