@@ -25,26 +25,27 @@ public class Main {
         }
     }
 
-    static void recursive(String str1, String ans, ArrayList<String> strings)
+    // using heap algorithm for generating permutations of the given string
+    static void recursive(String str1, String answerStr, ArrayList<String> strings)
     {
         if (str1.length() == 0) {
             boolean condition = true;
-            for (int i = 0; i < ans.length(); i++) {
-                if (i != (ans.length() - 1) && ans.charAt(i) == '1' && ans.charAt(i + 1)  == '1') {
+            for (int i = 0; i < answerStr.length(); i++) {
+                if (i != (answerStr.length() - 1) && answerStr.charAt(i) == '1' && answerStr.charAt(i + 1)  == '1') {
                     condition = false;
                     return;
                 }
             }
-            if (!strings.contains(ans)) {
-                strings.add(ans);
+            if (!strings.contains(answerStr)) {
+                strings.add(answerStr);
                 return;
             }
         }
 
         for (int i = 0; i < str1.length(); i++) {
-            char ch = str1.charAt(i);
-            String ros = str1.substring(0, i) + str1.substring(i + 1);
-            recursive(ros, ans + ch, strings);
+            char temp = str1.charAt(i);
+            String strTemp = str1.substring(0, i) + str1.substring(i + 1);
+            recursive(strTemp, answerStr + temp, strings);
         }
     }
 }
