@@ -110,10 +110,20 @@ public class InputHandler {
             // client has choiced exit option
             return;
         }
+        if (index > client.getOrderCounter() + 1 || index < 0) {
+            // invalid input
+            System.out.println("Your input is invalid!");
+            return;
+        }
         Drink drink = client.getOrder(index);
         client.cancelOrder(drink);
     }
     public void addOrder(int index) {
+        if (index < 0 || index > 5) {
+            // invalid input
+            System.out.println("Invalid input!");
+            return;
+        }
         Drink drink = new Drink(cafe.getDrinkName(index), cafe.getDrinkPrice(index));
         client.orderDrink(drink);
     }

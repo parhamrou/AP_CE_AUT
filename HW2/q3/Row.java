@@ -5,9 +5,21 @@ public class Row {
     private Chair[] right;
 
     public Row() {
+
         left = new Chair[3];
+        for (int i = 0; i < left.length; i++) {
+            left[i] = new Chair();
+        }
+
         middle = new Chair[4];
+        for (int i = 0; i < middle.length; i++) {
+            middle[i] = new Chair();
+        }
+
         right = new Chair[3];
+        for (int i = 0; i < right.length; i++) {
+            right[i] = new Chair();
+        }
     }
     public boolean getChair(int c) {
         if (c < 4) {
