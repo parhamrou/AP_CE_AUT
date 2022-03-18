@@ -249,11 +249,11 @@ public class Store {
             return;
         }
         //cheking if the amount is negative
-        if (entry.getValue().intValue() < 0) {
-            System.out.println("Invalid input.");
+        if (entry.getValue().intValue() < -amount && amount < 0) {
+            System.out.println("Greater than available amount in stock.");
             return;
         }
-        inventory.changeStock(entry.getKey(), amount);
+        inventory.changeStock(entry.getKey(), amount + entry.getValue().intValue());
         System.out.println("Successfully changed the amount.");
     }
 
