@@ -6,11 +6,14 @@ public class Player {
     
     private String name;
     private LinkedList<Card> cards;
+    private int repaireCount;
     private boolean isPC;
+
     //constructor
     public Player(String name, boolean isPC) {
         this.name = name;
         cards = new LinkedList<>();
+        repaireCount = 0;
         this.isPC = isPC;
     }
 
@@ -22,6 +25,21 @@ public class Player {
         this.cards = cards;
     }
 
+    public boolean getIsPc() {
+        if (isPC) {
+            return true;
+        }
+        return false;
+    }
+
+    public void setRepaireCount(int repaireCount) {
+        this.repaireCount = repaireCount;
+    }
+
+    public int getRepaireCount() {
+        return repaireCount;
+    }
+    
     public int getCardsNumber() {
         return cards.size();
     }
@@ -60,19 +78,21 @@ public class Player {
         System.out.println("Enter the number of cards you want to keep in one row: ");
         for (int i = 0; i < 10; i++) {
             int index = Main.input.nextInt();
-            cards.get(index - 1).setPicked(true);
+            this.cards.get(index - 1).setPicked(true);
         }
-        Iterator iterator = cards.iterator();
-        while (iterator.hasNext()) {
+        int deletedCounter = 0; // counts the number of deleted cards
+        Iterator iterator = this.cards.iterator();
+        while (deletedCounter != 20 && iterator.hasNext()) {
             Card card = (Card) iterator.next();
             if (!card.getPicked()) {
                 iterator.remove();
+                deletedCounter++;
             }
         } 
     }
 
     public void removeCard(int index) {
-        cards.remove(index - 1);
+        cards.remove(index);
     }
     public void showCards() {
         int index = 1;

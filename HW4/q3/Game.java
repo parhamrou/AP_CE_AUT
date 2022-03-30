@@ -1,4 +1,3 @@
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
@@ -9,9 +8,11 @@ public class Game {
     private ArrayList<Card> cards;
     private Player player1;
     private Player player2;
+    private boolean isPC;
+    private int roundCounter;
 
     // constructor
-    public Game() {
+    public Game(boolean isPC) {
         // creating and adding all the cards of the game
         Card lion = new Card("Lion", 150, 500, 1000, 900);
         Card bear = new Card("Bear", 130, 600, 900, 850);
@@ -39,6 +40,9 @@ public class Game {
         cards.add(cow);
         cards.add(rabbit);
         cards.add(turtle);
+
+        this.isPC = isPC;
+        this.roundCounter = 1;
     }
 
     public ArrayList<Card> getCards() {
@@ -56,7 +60,8 @@ public class Game {
         while (cardCounter != 30) {
             int index = random.nextInt(12);
             if (count[index] < 6) {
-                cards.add(this.cards.get(index)); // adding the card from source
+                Card card = new Card(this.cards.get(index));
+                cards.add(card); // adding the card from source
                 count[index]++; // adding to the number of cards of one animal
                 cardCounter++; // adding to the number of all cards of player
             }   
@@ -64,37 +69,44 @@ public class Game {
         return cards;
     }
 
-    public void manageGame(boolean isRandom) {
-        playerInitializer(isRandom); // setting players at first
+    public void manageGame() {
+        playerInitializer(); // setting players at first
         // setting 30 cards of each player at first 
         player1.setCards(initialRandomCards());
         player2.setCards(initialRandomCards());
         // pick 10 cards for each player
         player1.cardPicker();
-        if (isRandom) {
-            player2.cardPicker(isRandom); 
+        if (isPC) {
+            player2.cardPicker(isPC); 
         } else {
             player2.cardPicker();
         }
         while (!isFinished()) {
             showCards(player1, player2);
-            Attack(player1, player2);
-            if (isFinished()) {
+            action(player1, player2);
+            if (isFinished()) { // cheking if the game is over or not
+                endOfGamePrinter();
                 break;
             }
+            if (!isPC) {
             showCards(player2, player1);
-            Attack(player2, player1);
+            }
+            action(player2, player1);
+            roundCounter++;
         }
+        endOfGamePrinter();
         System.out.println("The game is finished!");
     }   
 
-    private void playerInitializer(boolean isRandom) {
+    private void playerInitializer() {
         String name1;
         String name2;
+        Main.input.nextLine();
         System.out.printf("Enter the name of player1: ");
         name1 = Main.input.nextLine();
         player1 = new Player(name1, false);
-        if (isRandom == true) {
+
+        if (isPC) {
             name2 = "PC";
             player2 = new Player(name2, true);
         } else {
@@ -119,48 +131,161 @@ public class Game {
         Attacker.showCards();
     }
 
-    private void Attack(Player attacker, Player defender) { // when the second player is not PC
+    private void repaire(Player player) {
+        Random random = new Random();
+        int index;
+
+        if (player.getIsPc()) {
+            index = random.nextInt(player.getCardsNumber() + 1);
+        } else {
+            System.out.printf("Enter the index of card you want to repair its energy: ");
+            index = Main.input.nextInt();
+        }
+        while (player.getCards().get(index - 1).isFull()) {
+            if (player.getIsPc()) {
+                index = random.nextInt(player.getCardsNumber() + 1);
+            } else {
+                System.out.printf("This card has full energy. Pick another card: ");
+                index = Main.input.nextInt();
+            }
+        }
+        player.getCards().get(index - 1).repair();
+        System.out.println("The energy of this player is repaired!");
+    }
+
+    private void action(Player attacker, Player defender) {
+        int choice;
+        Random random = new Random();
+        if (attacker.getRepaireCount() != 3 && roundCounter != 1) { // we nust check if is there any card for this or not?
+            
+            if (attacker.getIsPc()) {
+                choice = random.nextInt(2) + 1;
+            } else {
+                System.out.println("Do you want to 1. repaire one of your card's enery   or   2. Attack? ");
+                choice = Main.input.nextInt();
+            }
+            System.out.println("The choose is " + choice);
+            if (choice == 1) {
+                repaire(attacker);
+                attacker.setRepaireCount(attacker.getRepaireCount() + 1);
+            } else {
+                while (true) {
+                    if (attack(attacker, defender) == 1) {
+                        break;
+                    }
+                    if (!attacker.getIsPc()) {
+                        System.out.println("Your attack is failed. Try again!");
+                    }
+                }
+            }   
+        
+        } else {
+            while (true) {
+                if (attack(attacker, defender) == 1) {
+                    break;
+                }
+                if (!attacker.getIsPc()) {
+                    System.out.println("Your attack is failed. Try again!");
+                }
+            }
+        }
+    }
+
+    /**
+     * This method is for attacking mode.
+     * @param attacker The Player who wants to attack.
+     * @param defender The player who has to defend
+     * @param isPC // Boolean that we pass to the method to tell method that has to play random or not
+     * @return 
+     */
+    private int attack(Player attacker, Player defender) {
+        Random random = new Random();
         int totalKick = 0;
-        ArrayList<Integer> attackerCards = new ArrayList<>(); // this arraylist holds the indexes of cards that we want to attack with
-        System.out.printf("Enter the indexes of cards you want to attack with.\nWhen you're done, enter -1: ");
-        int index = Main.input.nextInt();
-        do {
-            attackerCards.add(index - 1);
+        ArrayList<Integer> attackerCards = new ArrayList<>();
+        int attackerCardsCount; // the number of cards we want to attack with
+        
+        if (attacker.getIsPc()) {
+            attackerCardsCount = random.nextInt(attacker.getCardsNumber()) + 1;
+            System.out.println("The number of cards that you have been attacked with: " + attackerCardsCount);
+        } else {
+            System.out.printf("With how many cards do you want to attack with? ");
+            attackerCardsCount = Main.input.nextInt();
+        }
+
+        for (int i = 0; i < attackerCardsCount; i++) { // adding n = attackerCardsCount cards to the arrayList
+            int index;
+            if (attacker.getIsPc()) {
+                index = random.nextInt(attacker.getCardsNumber()) + 1;
+            } else {
+                System.out.format("Enter the index of card%d: ", i + 1);
+                index = Main.input.nextInt();
+            }
+            while (attackerCards.contains(index)) { // repeat until the index is not in the list
+                
+                if (attacker.getIsPc()) {
+                    index = random.nextInt(attacker.getCardsNumber()) + 1;    
+                } else {
+                    System.out.format("This card has been added before. Enter new number: ");
+                    index = Main.input.nextInt();
+                }
+            }
+            attackerCards.add(index);
             if (attacker.getCards().get(index - 1).getHardKick() != 0 && attacker.getCards().get(index - 1).getNormalKick() != 0) {
-                System.out.println("DO you want to attack with 1. Hard Kick   or   2. Normal kick? ");
-                int choice = Main.input.nextInt();
+                int choice; // if the generated number is one, use hard Kick. else, use normal kick.
+                
+                if (attacker.getIsPc()) {
+                    choice = random.nextInt(2) + 1;
+                } else {
+                    System.out.println("DO you want to attack with 1. Hard Kick   or   2. Normal kick? ");
+                    choice = Main.input.nextInt();
+                }
+
                 if (choice == 1) {
                     totalKick += attacker.getCards().get(index - 1).getHardKick();
                 } else {
-
                     totalKick += attacker.getCards().get(index - 1).getNormalKick();
                 }
             } else {
-
                 if (attacker.getCards().get(index - 1).getHardKick() == 0) {
                     totalKick += attacker.getCards().get(index - 1).getNormalKick();
                 } else {
                     totalKick += attacker.getCards().get(index - 1).getHardKick();
                 }
             }
-            index = Main.input.nextInt();
-        } while (index != -1);
+
+        }
         double cost = totalKick / attackerCards.size();
         for (Integer number : attackerCards) {
-            if (attacker.getCards().get(number).getEnergy() - cost <= 0) {
-                // we must do something here
-                return;
+            if (attacker.getCards().get(number - 1).getCurrentEnergy() - cost <= 0) {
+                return -1; // this attack is failed. we have to repeat the attack
             }
         }
         for (Integer number : attackerCards) { // setting the new energy of each card
-            attacker.getCards().get(number).setEnergy(attacker.getCards().get(number).getEnergy() - cost);
+            attacker.getCards().get(number - 1).setCurrentEnergy(attacker.getCards().get(number - 1).getCurrentEnergy() - cost);
         }
-        System.out.printf("Which card do you want to attack to:");
-        index = Main.input.nextInt();
-        defender.getCards().get(index - 1).setElixir(defender.getCards().get(index - 1).getElixir() - totalKick);
-        if (defender.getCards().get(index - 1).getElixir() <= 0) {
-            defender.removeCard(index);
+        int defenderCard;
+        
+        if (attacker.getIsPc()) {
+            defenderCard = random.nextInt(defender.getCardsNumber()) + 1;
+            System.out.println("The card number " + defenderCard + " has been attacked in your deck!");
+        } else {
+            System.out.printf("Which card do you want to attack to:");
+            defenderCard = Main.input.nextInt();    
+        }
+
+        defender.getCards().get(defenderCard - 1).setElixir(defender.getCards().get(defenderCard - 1).getElixir() - totalKick);
+        if (defender.getCards().get(defenderCard - 1).getElixir() <= 0) {
+            defender.removeCard(defenderCard - 1);
             System.out.println("This card is dead!");
-        }        
+        }
+        return 1; 
+    }
+
+    private void endOfGamePrinter() {
+        if (player1.getCardsNumber() == 0) {
+            System.out.format("%s wins. Congratulations :))\n", player2.getName());
+            return;
+        }
+        System.out.format("%s wins. Congratulations :))\n", player1.getName());
     }
 }

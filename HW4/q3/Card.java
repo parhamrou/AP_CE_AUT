@@ -3,7 +3,8 @@ public class Card {
     private String name;
     private int normalKick;
     private int hardKick;
-    private double energy;
+    private double currentEnergy;
+    private double maxEnergy;
     private double elixir;
     private boolean isPicked;
 
@@ -12,13 +13,29 @@ public class Card {
         this.name = name;
         this.normalKick = normalKick;
         this.hardKick = hardKick;
-        this.energy = energy;
+        this.currentEnergy = energy;
+        this.maxEnergy = energy;
         this.elixir = elixir;
         this.isPicked = false;
     }
 
-    public double getEnergy() {
-        return energy;
+    // copy constructor
+    public Card(Card card) {
+        this.name = card.name;
+        this.normalKick = card.normalKick;
+        this.hardKick = card.hardKick;
+        this.currentEnergy = card.currentEnergy;
+        this.maxEnergy = card.maxEnergy;
+        this.elixir = card.elixir;
+        this.isPicked = card.isPicked;
+    }
+
+    public double getCurrentEnergy() {
+        return currentEnergy;
+    }
+
+    public void setCurrentEnergy(double currentEnergy) {
+        this.currentEnergy = currentEnergy;
     }
 
     public double getElixir() {
@@ -45,16 +62,23 @@ public class Card {
         return isPicked;
     }
 
-    public void setEnergy(double energy) {
-        this.energy = energy;
+    public void repair() {
+        currentEnergy = maxEnergy;
     }
 
     public void setElixir(double elixir) {
         this.elixir = elixir;
     }
 
+    public boolean isFull() {
+        if (currentEnergy == maxEnergy) {
+            return true;
+        }
+        return false;
+    }
+
     @Override
     public String toString() {
-        return String.format("Name: %s   Normal kick: %d    Hard kick: %d     Energy: %f    Elixir: %f\n", name, normalKick, hardKick, energy, elixir);
+        return String.format("Name: %s   Normal kick: %d    Hard kick: %d     Energy: %f    Elixir: %f\n", name, normalKick, hardKick, currentEnergy, elixir);
     }
 }
