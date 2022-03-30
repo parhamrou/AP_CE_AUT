@@ -1,6 +1,8 @@
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.Map;
 /**
  * In this class we have the methods that are used to
  * handle the commnads that are entered by user in main method.
@@ -46,19 +48,13 @@ public class Graph {
     */
     public void printGraph() {
         //finding the minimum for printing the graph sorted
-        int size = graph.size();
-        Integer[] sortedKeys = new Integer[size];
-        int counter = 0;
-        for (Integer integer : graph.keySet()) {
-            sortedKeys[counter] = integer;
-            counter++;
-        }
-        Arrays.sort(sortedKeys);
+        
+        Collections.sort(graph);
         System.out.println("Graph {");
-        for (Integer integer : sortedKeys) {
-            System.out.printf("%d : ", integer);
-            for (Integer value : graph.get(integer)) {
-                System.out.printf("%d ", value);
+        for (Map.Entry<Integer, ArrayList<Integer>> entry : graph) {
+            System.out.format("%d: ", entry.getKey());
+            for (Integer integer : entry.setValue()) {
+                System.out.format("%d ", integer);
             }
             System.out.println();
         }
