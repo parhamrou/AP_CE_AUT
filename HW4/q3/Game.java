@@ -9,8 +9,6 @@ public class Game {
     private Player player1;
     private Player player2;
     private boolean isPC;
-    private int roundCounter;
-
     // constructor
     public Game(boolean isPC) {
         // creating and adding all the cards of the game
@@ -42,7 +40,6 @@ public class Game {
         cards.add(turtle);
 
         this.isPC = isPC;
-        this.roundCounter = 1;
     }
 
     public ArrayList<Card> getCards() {
@@ -82,17 +79,16 @@ public class Game {
             player2.cardPicker();
         }
         while (!isFinished()) {
-            showCards(player1, player2);
+            attackShowCards(player1, player2);
             action(player1, player2);
             if (isFinished()) { // cheking if the game is over or not
                 endOfGamePrinter();
                 break;
             }
             if (!isPC) {
-            showCards(player2, player1);
+            attackShowCards(player2, player1);
             }
             action(player2, player1);
-            roundCounter++;
         }
         endOfGamePrinter();
         System.out.println("The game is finished!");
@@ -123,12 +119,12 @@ public class Game {
         return false;
     }
 
-    private void showCards(Player Attacker, Player defender) {
+    private void attackShowCards(Player Attacker, Player defender) {
         System.out.format("%s's cards: \n", defender.getName());
-        defender.showCards();
+        defender.defendShowCards();
         System.out.println("\n\n\n\n");
         System.out.format("%s's cards: \n", Attacker.getName());
-        Attacker.showCards();
+        Attacker.attackShowCards();
     }
 
     private void repaire(Player player) {
@@ -136,27 +132,28 @@ public class Game {
         int index;
 
         if (player.getIsPc()) {
-            index = random.nextInt(player.getCardsNumber() + 1);
+            index = random.nextInt(player.getCardsNumber()) + 1;
         } else {
             System.out.printf("Enter the index of card you want to repair its energy: ");
             index = Main.input.nextInt();
         }
         while (player.getCards().get(index - 1).isFull()) {
             if (player.getIsPc()) {
-                index = random.nextInt(player.getCardsNumber() + 1);
+                index = random.nextInt(player.getCardsNumber()) + 1;
             } else {
                 System.out.printf("This card has full energy. Pick another card: ");
                 index = Main.input.nextInt();
             }
         }
         player.getCards().get(index - 1).repair();
-        System.out.println("The energy of this player is repaired!");
+        player.setRepaireCount(player.getRepaireCount() + 1);
+        System.out.println("The energy of card number " + index +  " is repaired!");
     }
 
     private void action(Player attacker, Player defender) {
         int choice;
         Random random = new Random();
-        if (attacker.getRepaireCount() != 3 && roundCounter != 1) { // we nust check if is there any card for this or not?
+        if (attacker.getRepaireCount() != 3 && attacker.canRepair()) { 
             
             if (attacker.getIsPc()) {
                 choice = random.nextInt(2) + 1;
@@ -167,7 +164,6 @@ public class Game {
             System.out.println("The choose is " + choice);
             if (choice == 1) {
                 repaire(attacker);
-                attacker.setRepaireCount(attacker.getRepaireCount() + 1);
             } else {
                 while (true) {
                     if (attack(attacker, defender) == 1) {
@@ -206,7 +202,6 @@ public class Game {
         
         if (attacker.getIsPc()) {
             attackerCardsCount = random.nextInt(attacker.getCardsNumber()) + 1;
-            System.out.println("The number of cards that you have been attacked with: " + attackerCardsCount);
         } else {
             System.out.printf("With how many cards do you want to attack with? ");
             attackerCardsCount = Main.input.nextInt();
@@ -260,6 +255,7 @@ public class Game {
                 return -1; // this attack is failed. we have to repeat the attack
             }
         }
+        System.out.println("The number of cards that you have been attacked with: " + attackerCardsCount);
         for (Integer number : attackerCards) { // setting the new energy of each card
             attacker.getCards().get(number - 1).setCurrentEnergy(attacker.getCards().get(number - 1).getCurrentEnergy() - cost);
         }

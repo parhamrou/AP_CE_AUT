@@ -79,6 +79,6 @@ public class Card {
 
     @Override
     public String toString() {
-        return String.format("Name: %s   Normal kick: %d    Hard kick: %d     Energy: %f    Elixir: %f\n", name, normalKick, hardKick, currentEnergy, elixir);
+        return String.format("Name: %s   Normal kick: %d    Hard kick: %d     Energy: %.2f    Elixir: %.2f\n", name, normalKick, hardKick, currentEnergy, elixir);
     }
 }

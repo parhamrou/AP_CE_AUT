@@ -32,6 +32,15 @@ public class Player {
         return false;
     }
 
+    public boolean canRepair() {
+        for (Card card : cards) {
+            if (!card.isFull()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public void setRepaireCount(int repaireCount) {
         this.repaireCount = repaireCount;
     }
@@ -94,11 +103,23 @@ public class Player {
     public void removeCard(int index) {
         cards.remove(index);
     }
-    public void showCards() {
+
+    public void attackShowCards() {
         int index = 1;
         for (Card card : cards) {
             System.out.println(index + ". " + card);
             index++;
+        }
+    }
+
+    public void defendShowCards() {
+        int index = 0;
+        for (Card card : cards) {
+            System.out.format("%2d. %5s  Elixir: %15.2f     ", index + 1, card.getName(), card.getElixir());
+            index++;
+            if (index % 4 == 0) {
+                System.out.println();
+            }
         }
     }
 }
