@@ -5,10 +5,13 @@ public class Main {
     public static void main(String[] args) {
         int choice1;
         firstMenu();
+        System.out.printf("\t\t\t\t\t");
         choice1 = input.nextInt();
         while (choice1 != 2) {
             if (choice1 == 1) { // New game
+                Game.clearScreeen();
                 secondMenu();
+                System.out.printf("\t\t\t\t\t");
                 int choice2 = input.nextInt();
                 if (choice2 == 1) {
                     Game game = new Game(false);
@@ -30,11 +33,11 @@ public class Main {
     }
 
     public static void firstMenu() {
-        System.out.println("\t\t\t1. New game");
-        System.out.println("\t\t\t2. Exit");
+        System.out.println("\t\t\t\t\t1. New game");
+        System.out.println("\t\t\t\t\t2. Exit");
     }
 
     public static void secondMenu() {
-        System.out.println("\t\t\tDo you want to play with: 1. Your friend    2. PC");
+        System.out.println("\t\t\t\t\tDo you want to play with: 1. Your friend    2. PC");
     }
 }

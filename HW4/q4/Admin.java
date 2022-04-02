@@ -27,12 +27,17 @@ public class Admin {
 
             default: 
                 System.out.println("The doctor's type is invalid!");
+                System.out.println("Press enter to back to menu...");
+                Main.input.nextLine();
                 return;
         }
         System.out.printf("Enter doctor's entry charge: ");
         double entryCharge = Main.input.nextDouble();
         Doctor doctor = new Doctor(firstName, lastName, age, doctorType, entryCharge);
         hospital.addDoctor(doctor);
+        System.out.println("Press enter to back to menu...");
+        Main.input.nextLine();
+        Main.input.nextLine();
     }
 
     private void viewDoctors(Hospital hospital) {
@@ -53,26 +58,40 @@ public class Admin {
     }
 
     public void adminMenuHandler(Hospital hospital) {
+        Main.clearScreen();
         menuPrinter();
         int choice = Main.input.nextInt();
         while (choice != 4) {
             switch (choice) {
-                case 1: 
+                case 1:
+                    Main.clearScreen(); 
                     viewDoctors(hospital);
+                    System.out.println("Press enter to back to menu...");
+                    Main.input.nextLine();
+                    Main.input.nextLine();
                     break;
 
                 case 2:
+                    Main.clearScreen();
                     viewPatients(hospital);
+                    System.out.println("Press enter to back to menu...");
+                    Main.input.nextLine();
+                    Main.input.nextLine();
                     break;
             
                 case 3:
                     Main.input.nextLine();
+                    Main.clearScreen();
                     addDoctor(hospital);
                     break;
 
                default:
                     System.out.println("Your input is invalid!");
+                    System.out.println("Press enter to back to menu...");
+                    Main.input.nextLine();
+                    Main.input.nextLine();
             }
+        Main.clearScreen();
         menuPrinter();
         choice = Main.input.nextInt();
         }

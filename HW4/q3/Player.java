@@ -78,13 +78,13 @@ public class Player {
         int counter = 0;
         // showing al 30 cards
         for (Card card : cards) {
-            System.out.printf("%d. %s     ", counter + 1, card.getName());
+            System.out.printf("%d. %-5s     ", counter + 1, card.getName());
             counter++;
             if (counter % 5 == 0) {
                 System.out.println();
             }
         }
-        System.out.println("Enter the number of cards you want to keep in one row: ");
+        System.out.println(name + "! Enter the indexes of cards you want to keep in one row: ");
         for (int i = 0; i < 10; i++) {
             int index = Main.input.nextInt();
             this.cards.get(index - 1).setPicked(true);
@@ -115,11 +115,8 @@ public class Player {
     public void defendShowCards() {
         int index = 0;
         for (Card card : cards) {
-            System.out.format("%2d. %5s  Elixir: %15.2f     ", index + 1, card.getName(), card.getElixir());
+            System.out.format("%d. %s    %s\n", index + 1, card.getName(), String.format("Elixir: %.2f", card.getElixir()));
             index++;
-            if (index % 4 == 0) {
-                System.out.println();
-            }
         }
     }
 }

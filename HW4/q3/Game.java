@@ -12,32 +12,19 @@ public class Game {
     // constructor
     public Game(boolean isPC) {
         // creating and adding all the cards of the game
-        Card lion = new Card("Lion", 150, 500, 1000, 900);
-        Card bear = new Card("Bear", 130, 600, 900, 850);
-        Card tiger = new Card("Tiger", 120, 650, 850, 850);
-        Card vulture = new Card("Vulture", 100, 0, 600, 350);
-        Card fox = new Card("Fox", 90, 0, 600, 350);
-        Card elephant = new Card("Elephant", 50, 70, 500, 1200);
-        Card wolf = new Card("Wolf", 0, 700, 700, 450);
-        Card hog = new Card("Hog", 80, 0, 500, 1100);
-        Card hippopotamus = new Card("Hippopotamus", 110, 0, 360, 1000);
-        Card cow = new Card("Cow", 90, 100, 400, 750);
-        Card rabbit = new Card("Rabbit", 80, 0, 350, 200);
-        Card turtle = new Card("Turtle", 200, 0, 230, 350);
-
         cards = new ArrayList<>();
-        cards.add(lion);
-        cards.add(bear);
-        cards.add(tiger);
-        cards.add(vulture);
-        cards.add(fox);
-        cards.add(elephant);
-        cards.add(wolf);
-        cards.add(hog);
-        cards.add(hippopotamus);
-        cards.add(cow);
-        cards.add(rabbit);
-        cards.add(turtle);
+        cards.add(new Card("Lion", 150, 500, 1000, 900));
+        cards.add(new Card("Bear", 130, 600, 900, 850));
+        cards.add(new Card("Tiger", 120, 650, 850, 850));
+        cards.add(new Card("Vulture", 100, 0, 600, 350));
+        cards.add(new Card("Fox", 90, 0, 600, 350));
+        cards.add(new Card("Elephant", 50, 70, 500, 1200));
+        cards.add(new Card("Wolf", 0, 700, 700, 450));
+        cards.add(new Card("Hog", 80, 0, 500, 1100));
+        cards.add(new Card("Hippo", 110, 0, 360, 1000));
+        cards.add(new Card("Cow", 90, 100, 400, 750));
+        cards.add(new Card("Rabbit", 80, 0, 350, 200));
+        cards.add(new Card("Turtle", 200, 0, 230, 350));
 
         this.isPC = isPC;
     }
@@ -67,28 +54,29 @@ public class Game {
     }
 
     public void manageGame() {
+        clearScreeen();
         playerInitializer(); // setting players at first
         // setting 30 cards of each player at first 
         player1.setCards(initialRandomCards());
         player2.setCards(initialRandomCards());
         // pick 10 cards for each player
+        clearScreeen();
         player1.cardPicker();
+        clearScreeen();
         if (isPC) {
             player2.cardPicker(isPC); 
         } else {
             player2.cardPicker();
         }
+        clearScreeen();
         while (!isFinished()) {
-            attackShowCards(player1, player2);
             action(player1, player2);
             if (isFinished()) { // cheking if the game is over or not
                 endOfGamePrinter();
                 break;
             }
-            if (!isPC) {
-            attackShowCards(player2, player1);
-            }
             action(player2, player1);
+            clearScreeen();
         }
         endOfGamePrinter();
         System.out.println("The game is finished!");
@@ -122,7 +110,7 @@ public class Game {
     private void attackShowCards(Player Attacker, Player defender) {
         System.out.format("%s's cards: \n", defender.getName());
         defender.defendShowCards();
-        System.out.println("\n\n\n\n");
+        System.out.println("\n\n\n");
         System.out.format("%s's cards: \n", Attacker.getName());
         Attacker.attackShowCards();
     }
@@ -148,6 +136,9 @@ public class Game {
         player.getCards().get(index - 1).repair();
         player.setRepaireCount(player.getRepaireCount() + 1);
         System.out.println("The energy of card number " + index +  " is repaired!");
+        if (!player.getIsPc()) {
+            Main.input.nextLine();
+        }
     }
 
     private void action(Player attacker, Player defender) {
@@ -156,34 +147,60 @@ public class Game {
         if (attacker.getRepaireCount() != 3 && attacker.canRepair()) { 
             
             if (attacker.getIsPc()) {
+                clearScreeen();
+                System.out.println("PC's action: ");
                 choice = random.nextInt(2) + 1;
             } else {
-                System.out.println("Do you want to 1. repaire one of your card's enery   or   2. Attack? ");
+                attackShowCards(attacker, defender);
+                System.out.println("\nDo you want to 1. repaire one of your card's energy   or   2. Attack? ");
                 choice = Main.input.nextInt();
             }
-            System.out.println("The choose is " + choice);
             if (choice == 1) {
                 repaire(attacker);
+                System.out.println("Press enter to continue...");
+                Main.input.nextLine();
+                clearScreeen();
+                return;
             } else {
                 while (true) {
                     if (attack(attacker, defender) == 1) {
                         break;
                     }
                     if (!attacker.getIsPc()) {
-                        System.out.println("Your attack is failed. Try again!");
+                        System.out.println("Your attack is failed. Press enter to try again...");
+                        Main.input.nextLine();
+                        Main.input.nextLine();
+                        clearScreeen();
+                        attackShowCards(attacker, defender);
                     }
                 }
+                System.out.println("press enter to continue...");
+                Main.input.nextLine();
+                clearScreeen();
             }   
         
         } else {
+            if (!attacker.getIsPc()) {
+                attackShowCards(attacker, defender);
+            } else {
+                clearScreeen();
+                System.out.println("PC's action: ");
+            }
             while (true) {
                 if (attack(attacker, defender) == 1) {
                     break;
                 }
                 if (!attacker.getIsPc()) {
-                    System.out.println("Your attack is failed. Try again!");
+                    System.out.println("Your attack is failed. Press enter to try again...");
+                    Main.input.nextLine();
+                    Main.input.nextLine();
+                    clearScreeen();
+                    attackShowCards(attacker, defender);
                 }
             }
+            System.out.println("press enter to continue...");
+            Main.input.nextLine();
+            clearScreeen();
         }
     }
 
@@ -203,10 +220,9 @@ public class Game {
         if (attacker.getIsPc()) {
             attackerCardsCount = random.nextInt(attacker.getCardsNumber()) + 1;
         } else {
-            System.out.printf("With how many cards do you want to attack with? ");
+            System.out.printf("\nHow many cards do you want to attack with? ");
             attackerCardsCount = Main.input.nextInt();
         }
-
         for (int i = 0; i < attackerCardsCount; i++) { // adding n = attackerCardsCount cards to the arrayList
             int index;
             if (attacker.getIsPc()) {
@@ -255,7 +271,9 @@ public class Game {
                 return -1; // this attack is failed. we have to repeat the attack
             }
         }
-        System.out.println("The number of cards that you have been attacked with: " + attackerCardsCount);
+        if (attacker.getIsPc()) {
+            System.out.println("The number of cards that you have been attacked with: " + attackerCardsCount);
+        }
         for (Integer number : attackerCards) { // setting the new energy of each card
             attacker.getCards().get(number - 1).setCurrentEnergy(attacker.getCards().get(number - 1).getCurrentEnergy() - cost);
         }
@@ -266,13 +284,15 @@ public class Game {
             System.out.println("The card number " + defenderCard + " has been attacked in your deck!");
         } else {
             System.out.printf("Which card do you want to attack to:");
-            defenderCard = Main.input.nextInt();    
+            defenderCard = Main.input.nextInt();
+            Main.input.nextLine();
         }
 
         defender.getCards().get(defenderCard - 1).setElixir(defender.getCards().get(defenderCard - 1).getElixir() - totalKick);
         if (defender.getCards().get(defenderCard - 1).getElixir() <= 0) {
             defender.removeCard(defenderCard - 1);
-            System.out.println("This card is dead!");
+            System.out.println("The card died!");
+
         }
         return 1; 
     }
@@ -283,5 +303,11 @@ public class Game {
             return;
         }
         System.out.format("%s wins. Congratulations :))\n", player1.getName());
+    }
+
+
+    public static void clearScreeen() {
+        System.out.print("\033[H\033[2J");
+        System.out.flush();
     }
 }

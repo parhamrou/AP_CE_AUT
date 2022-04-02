@@ -6,12 +6,13 @@ public class Main {
 
         Hospital hospital = new Hospital();
         Admin admin = new Admin();
-
+        clearScreen();
         FirstMenu();
         int choice = input.nextInt();
         while (choice != 5) {
             switch (choice) {
                 case 1:
+                    clearScreen();
                     System.out.printf("Enter the password of the admin: ");
                     int password = input.nextInt();
                     if (password != 123) {
@@ -23,36 +24,57 @@ public class Main {
 
                 case 2:
                     if (hospital.viewPatients() == -1) {
+                        System.out.println("Press enter to back to menu...");
+                        Main.input.nextLine();
+                        Main.input.nextLine();
                         break;
                     }
-                    System.out.println("Enter the index of the patient: ");
+                    System.out.println("\nEnter the index of the patient: ");
                     int index = input.nextInt();
                     if (index < 0 || index > hospital.getPatients().size()) {
+                        clearScreen();
                         System.out.println("Invalid index!");
+                        System.out.println("Press enter to back to menu...");
+                        Main.input.nextLine();
+                        Main.input.nextLine();
+                        Main.clearScreen();
                         break;
                     }
                     hospital.getPatients().get(index - 1).patientMenuHandler(hospital);
                     break;
 
                 case 3:
+                    clearScreen();
                     hospital.viewDoctors();
-                    System.out.println("Inter the index of the doctor: ");
+                    System.out.printf("Enter the index of the doctor: ");
                     index = input.nextInt();
                     if (index < 0 || index > hospital.getDoctors().size()) {
                         System.out.println("Invalid index!");
+                        System.out.println("Press enter to back to menu...");
+                        Main.input.nextLine();
+                        Main.input.nextLine();
                         break;
                     }
                     hospital.getDoctors().get(index - 1).doctorMenuHandler(hospital);
                     break;
 
                 case 4:
+                    clearScreen();
                     hospital.addPatient();
+                    System.out.println("Press enter to back to menu...");
+                    Main.input.nextLine();
+
                     break;
                     
                 default:
+                    clearScreen();
                     System.out.println("Invalid input!");
+                    System.out.println("Press enter to back to menu...");
+                    Main.input.nextLine();
+                    Main.input.nextLine();
                     break;
             }
+            clearScreen();
             FirstMenu();
             choice = input.nextInt();
         }
@@ -67,7 +89,6 @@ public class Main {
     }
 
     public static void clearScreen() {
-        System.out.print("Everything on the console will cleared");
         System.out.print("\033[H\033[2J");
         System.out.flush();
     }

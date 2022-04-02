@@ -17,6 +17,18 @@ public class Report {
         this.doctorsComment = doctorsComment;
     }
 
+    public String getDoctorFirstName() {
+        return doctorFirstName;
+    }
+
+    public String getDoctorLastName() {
+        return doctorLastName;
+    }
+
+    public String getMedicinePrescribed() {
+        return medicinePrescribed;
+    }
+    
     public void showReport() {
         System.out.format("Doctor: %s %s\nPatient:  %s %s\nMedicinePrescribed: %s\nDoctor's comment: %s\n\n", doctorFirstName, doctorLastName, patientFirstName, patientLastName, medicinePrescribed, doctorsComment);
     }

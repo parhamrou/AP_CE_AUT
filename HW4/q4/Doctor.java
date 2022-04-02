@@ -1,3 +1,4 @@
+import java.lang.ref.Cleaner.Cleanable;
 import java.util.ArrayList;
 
 public class Doctor {
@@ -42,7 +43,8 @@ public class Doctor {
     public void viewDoctor() {
         System.out.println("Name: " + firstName + " " + lastName);
         System.out.println("Doctor's type: " + doctorType);
-        System.out.println("Entry Charge: \n" + entryCharge);
+        System.out.println("Entry Charge: " + entryCharge);
+        System.out.println();
     }
     
     public String getDoctorType() {
@@ -69,10 +71,13 @@ public class Doctor {
 
     private void addReport(Hospital hospital) {
         if (ViewAppointments() == -1) {
+            System.out.println("Press enter to back to menu...");
+            Main.input.nextLine();
+            Main.input.nextLine(); 
             return;
         }
         Main.input.nextLine();
-        System.out.printf("Enter the index of the appointment: ");
+        System.out.printf("\nEnter the index of the appointment: ");
         int choice = Main.input.nextInt();
         if (choice <= 0 || choice > appointments.size()) {
             System.out.println("Invalid index!");
@@ -80,6 +85,7 @@ public class Doctor {
         }
         Patient patient = searchPatient(appointments.get(choice - 1).getPatientFirstName(), appointments.get(choice - 1).getPatientLastName(), hospital);
         Main.input.nextLine();
+        Main.clearScreen();
         System.out.printf("Write the prescribed of the report: ");
         String prescribed = Main.input.nextLine();
         System.out.printf("Write your comment: ");
@@ -88,6 +94,8 @@ public class Doctor {
         patient.addReport(report);
         appointments.remove(choice - 1); // removing the appointment after writing the report
         System.out.println("The report is added!");
+        System.out.println("Press enter to back to menu...");
+        Main.input.nextLine(); 
     }
 
     private void menuPrinter() {
@@ -97,21 +105,28 @@ public class Doctor {
     }
 
     public void doctorMenuHandler(Hospital hospital) {
+        Main.clearScreen();
         menuPrinter();
         int choice = Main.input.nextInt();
         while (choice != 3) {
             switch (choice) {
                 case 1:
+                    Main.clearScreen();
                     viewDoctor();
+                    System.out.println("Press enter to back to menu...");
+                    Main.input.nextLine();
+                    Main.input.nextLine();
                     break;
 
                 case 2:
-                    addReport(hospital);                            
+                    Main.clearScreen();
+                    addReport(hospital);   
                     break;
 
                 default:
                     break;
             }
+            Main.clearScreen();
             menuPrinter();
             choice = Main.input.nextInt();
         }

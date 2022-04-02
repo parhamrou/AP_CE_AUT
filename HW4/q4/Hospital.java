@@ -62,10 +62,12 @@ public class Hospital {
 
     public int viewPatients() {
         if (patients.size() == 0) {
-            System.out.println("There is not patient in the list!");
+            Main.clearScreen();
+            System.out.println("There is no patient in the list!");
             return -1;
         }
         int index = 1;
+        Main.clearScreen();
         for (Patient patient : patients) {
             System.out.print(index + ". ");
             patient.viewPatient();
