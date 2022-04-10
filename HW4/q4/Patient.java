@@ -1,5 +1,3 @@
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 public class Patient {
@@ -35,10 +33,17 @@ public class Patient {
         return address;
     }
 
+    /**
+     * This method is for adding a new report to the list of reports of the patient.
+     * @param report This is the new report that we want to add the the patient's reports list.
+     */
     public void addReport(Report report) {
         reports.add(report);
     }
 
+    /**
+     * This method is for showing the information of the patient.
+     */
     public void viewPatient() {
         System.out.println("Name: " + firstName + " " + lastName);
         System.out.println("Age: " + age);
@@ -46,6 +51,10 @@ public class Patient {
         System.out.println();
     }
 
+    /**
+     * This method is for managing the choices of the user and calling the proper methods.
+     * @param hospital This is the hospital object that the patient belongs to.
+     */
     public void patientMenuHandler(Hospital hospital) {
         Main.clearScreen();
         printMenu();
@@ -105,6 +114,9 @@ public class Patient {
         }
     }
 
+    /**
+     * This method prints the first menu after a patient logins.
+     */
     private void printMenu() {
         System.out.println("1. ViewProfile");
         System.out.println("2. BookAppointments");
@@ -112,6 +124,13 @@ public class Patient {
         System.out.println("4. LogOut");
     }
 
+    /**
+     * This method is for showing the doctors with a special type. It is used when the patient 
+     * wants to add a new appointment.
+     * @param hospital This is the hospital object that the doctor and the patient belong to.
+     * @param type This is the doctor's type that we want to seach for.
+     * @return This is the list of doctors which has the proper type.
+     */
     private ArrayList<Doctor> viewProperDoctors(Hospital hospital, String type) {
         int index = 1;
         ArrayList<Doctor> doctors = new ArrayList<>();
@@ -126,6 +145,12 @@ public class Patient {
         return doctors;
     }
 
+    /**
+     * This method is for adding a new appointment to the patient and
+     * the doctor.
+     * @param hospital This is the hospital object that the patient belongs to.
+     * @param type This is the type of doctor that the patients wants.
+     */
     private void bookAppointment(Hospital hospital, String type) {
         Main.clearScreen();
         ArrayList<Doctor> properDoctors = viewProperDoctors(hospital, type);
@@ -139,18 +164,20 @@ public class Patient {
             return;
         }
         Doctor doctor = properDoctors.get(choice - 1);
+        Main.input.nextLine();
         // this part must be changed
-        LocalDateTime date = LocalDateTime.now().plusDays(7);
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-        String formattedDateTime = date.format(formatter);
-        Appointment appointment  = new Appointment(doctor.getFirstName(), doctor.getLastName(), this.firstName, this.lastName, doctor.getDoctorType(), formattedDateTime);
+        System.out.printf("Enter the date that you want to book appointment.\nYou have to enter the date in this format: yyyy-MM-dd HH:mm\n");
+        String date = Main.input.nextLine();
+        Appointment appointment  = new Appointment(doctor.getFirstName(), doctor.getLastName(), this.firstName, this.lastName, doctor.getDoctorType(), date);
         doctor.addAppointment(appointment);
         System.out.println("The appointment is added!");
         System.out.println("Press enter to back to menu...");
         Main.input.nextLine();
-        Main.input.nextLine();
     }
     
+    /**
+     * This method is for viewing the reports of the patient.
+     */
     private void viewReports() {
         Main.clearScreen();
         if (reports.size() == 0) {
@@ -174,6 +201,9 @@ public class Patient {
         reports.get(choice - 1).showReport();
     }
 
+    /**
+     * This method is for cheking the equlity of two patients.
+     */
     @Override
     public boolean equals(Object obj) {
         Patient patient = (Patient) obj;

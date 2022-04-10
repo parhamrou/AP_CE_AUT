@@ -1,4 +1,3 @@
-import java.lang.ref.Cleaner.Cleanable;
 import java.util.ArrayList;
 
 public class Doctor {
@@ -39,7 +38,10 @@ public class Doctor {
     public double getEntryCharge() {
         return entryCharge;
     }
-    
+
+    /**
+     * This method is for viewing the information of the doctor.
+     */
     public void viewDoctor() {
         System.out.println("Name: " + firstName + " " + lastName);
         System.out.println("Doctor's type: " + doctorType);
@@ -55,6 +57,10 @@ public class Doctor {
         appointments.add(appointment);
     }
 
+    /**
+     * This method is for viewing the appointments of the doctor.
+     * @return It will be -1 if there is no appointment in the list and will be 1 if there is at least one.
+     */
     private int ViewAppointments() {
         int index = 1;
         for (Appointment appointment : appointments) {
@@ -69,6 +75,11 @@ public class Doctor {
         return 1;
     }
 
+    /**
+     * This method is for adding a new report to the list of reports of the patient. it is used by 
+     * the patient's doctor.
+     * @param hospital This is the hospital onject which the patient belongs to.
+     */
     private void addReport(Hospital hospital) {
         if (ViewAppointments() == -1) {
             System.out.println("Press enter to back to menu...");
@@ -98,12 +109,19 @@ public class Doctor {
         Main.input.nextLine(); 
     }
 
+    /**
+     * This method is for printing the doctor's menu after login.
+     */
     private void menuPrinter() {
         System.out.println("1. ViewProfile");
         System.out.println("2. ViewAppointments");
         System.out.println("3. Logout");
     }
 
+    /**
+     * This method is for managing the choices of the user and calling the proper methods.
+     * @param hospital 
+     */
     public void doctorMenuHandler(Hospital hospital) {
         Main.clearScreen();
         menuPrinter();
@@ -132,6 +150,13 @@ public class Doctor {
         }
     }
 
+    /**
+     * This method gives the firstName and lastName of a patient and searches for it in the list of the patients in the hospital.
+     * @param firstName
+     * @param lastName
+     * @param hospital
+     * @return 
+     */
     private Patient searchPatient(String firstName, String lastName, Hospital hospital) {
         for (Patient patient : hospital.getPatients()) {
             if (firstName.equals(patient.getFirstName()) && lastName.equals(patient.getLastName())) {
@@ -141,6 +166,9 @@ public class Doctor {
         return null;
     }
 
+    /**
+     * This method is for cheking the equality of two doctors based on their information.
+     */
     @Override
     public boolean equals(Object obj) {
         Doctor doctor = (Doctor) obj;

@@ -26,12 +26,14 @@ public class Player {
     }
 
     public boolean getIsPc() {
-        if (isPC) {
-            return true;
-        }
-        return false;
+        return isPC;
     }
 
+    /**
+     * This method is for cheking if the player can repair one of his/her cards or not.
+     * if the total number of repairs of player is fewer than three, he can.
+     * @return 
+     */
     public boolean canRepair() {
         for (Card card : cards) {
             if (!card.isFull()) {
@@ -72,7 +74,7 @@ public class Player {
     }
 
     /**
-     * This method picks cards by the descion of player.
+     * This method picks cards by the decision of the player when the player is not PC.
      */
     public void cardPicker() {
         int counter = 0;
@@ -100,10 +102,18 @@ public class Player {
         } 
     }
 
+    /**
+     * This method gets a index and removes it when the elixir of it is less than or equal to zero.
+     * @param index 
+     */
     public void removeCard(int index) {
         cards.remove(index);
     }
 
+    /**
+     * This method shows the cards when a player wants to attak to 
+     * help him to choose his cards.
+     */
     public void attackShowCards() {
         int index = 1;
         for (Card card : cards) {
@@ -112,6 +122,9 @@ public class Player {
         }
     }
 
+    /**
+     * This method shows the cards of player's enemy to help him choose one of his cards to attack to.
+     */
     public void defendShowCards() {
         int index = 0;
         for (Card card : cards) {

@@ -1,6 +1,9 @@
 import java.util.Scanner;
 
 public class Main {
+    /**
+     * This is the main method. We manage the program and show the first menu in this method.
+     */
     public static final Scanner input = new Scanner(System.in);
     public static void main(String[] args) {     
 
@@ -80,6 +83,9 @@ public class Main {
         }
     }
 
+    /**
+     * This method shows the first menu of program.
+     */
     private static void FirstMenu() {
         System.out.println("1. ADMIN - LOGIN");
         System.out.println("2. PATIENT - LOGIN");
@@ -88,6 +94,9 @@ public class Main {
         System.out.println("5. EXIT");
     }
 
+    /**
+     * This method is for cleaning the console.
+     */
     public static void clearScreen() {
         System.out.print("\033[H\033[2J");
         System.out.flush();

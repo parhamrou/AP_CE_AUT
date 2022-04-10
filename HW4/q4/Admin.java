@@ -1,6 +1,10 @@
 
 public class Admin {
-    
+
+    /**
+     * This method is for adding new doctor to the hospital by the admin.
+     * @param hospital This is the hospital object that we want to add the doctor to.
+     */
     private void addDoctor(Hospital hospital) {
         System.out.printf("Enter doctor's first name: ");
         String firstName = Main.input.nextLine();
@@ -40,16 +44,27 @@ public class Admin {
         Main.input.nextLine();
     }
 
+    /**
+     * This method is for viewing the information of doctors of the hospital.
+     * @param hospital  This is the hospital that we want to show its doctors' information.
+     */
     private void viewDoctors(Hospital hospital) {
         hospital.viewDoctors();
     }
 
+    /**
+     * This method is for viewing the information of the patients of the hospital.
+     * @param hospital This is the hospital that we wnat to show its patients' information.
+     */
     private void viewPatients(Hospital hospital) {
         if (hospital.viewPatients() == -1) {
             return;
         }
     }
 
+    /**
+     * This method is for printing the admin's menu.
+     */
     private void menuPrinter() {
         System.out.println("1. DoctorsList");
         System.out.println("2. PatientsList");
@@ -57,6 +72,10 @@ public class Admin {
         System.out.println("4. LogOut");
     }
 
+    /**
+     * This method is for managing the choices of the user and calling the proper methods.
+     * @param hospital This is the hospital that we want to work with its methods and...
+     */
     public void adminMenuHandler(Hospital hospital) {
         Main.clearScreen();
         menuPrinter();

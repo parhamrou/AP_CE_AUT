@@ -19,6 +19,10 @@ public class Hospital {
         return patients;
     }
 
+    /**
+     * This method is for adding a new doctor to the doctors list in this class. 
+     * @param doctor The new object from Doctor class that we want to add to doctors.
+     */
     public void addDoctor(Doctor doctor) {
         if (doctors.contains(doctor)) {
             System.out.println("The doctor is in the list already!");
@@ -28,6 +32,11 @@ public class Hospital {
         System.out.println("The doctor is added succesfully!");
     }
 
+    /**
+     * This method is for adding a new patient to the patients list in this class.
+     * In this method, the information of the new patient is given from the user and 
+     * then if the patienhas not been added before, it will be added to the list.
+     */
     public void addPatient() {
         Main.input.nextLine();
         System.out.printf("Enter the patient's first name: ");
@@ -47,6 +56,10 @@ public class Hospital {
         patients.add(patient);
         System.out.println("The patient is added succesfully!");
     }
+
+    /**
+     * This method is for viewing the infomation of all doctors in the class.
+     */
     public void viewDoctors() {
         if (doctors.size() == 0) {
             System.out.println("There is no doctor in the list!");
@@ -60,6 +73,10 @@ public class Hospital {
         }
     }
 
+    /**
+     * This method is for viewing the information of all patients in the class.
+     * @return it will return if there is no patient in the last and return 1 if at least there is one patient.
+     */
     public int viewPatients() {
         if (patients.size() == 0) {
             Main.clearScreen();

@@ -33,7 +33,7 @@ public class Game {
         return cards;
     }
     /**
-     * This method generates all 30 cards for each player in the beginning of the game.
+     * This method generates all 30 cards randomly for each player in the beginning of the game.
      */
     private LinkedList<Card> initialRandomCards() {
         LinkedList<Card> cards = new LinkedList<>(); // LinkedList for all 30 cards of one player 
@@ -53,6 +53,9 @@ public class Game {
         return cards;
     }
 
+    /**
+     * This method manages the game and calls the proper methods during the game.
+     */
     public void manageGame() {
         clearScreeen();
         playerInitializer(); // setting players at first
@@ -82,6 +85,9 @@ public class Game {
         System.out.println("The game is finished!");
     }   
 
+    /**
+     * This method is for making two new players and setting their names.
+     */
     private void playerInitializer() {
         String name1;
         String name2;
@@ -100,6 +106,11 @@ public class Game {
         }
     }
 
+    /**
+     * This method checks if the game is finished or not after each attack.
+     * If the number of cards of one player becomes zero, the game is finished.
+     * @return
+     */
     private boolean isFinished() {
         if (player1.getCardsNumber() == 0 && player2.getCardsNumber() == 0) {
             return true;
@@ -107,6 +118,10 @@ public class Game {
         return false;
     }
 
+    /**
+     * This method shows the cards of the attacker and defender at each 
+     * attack in the console.
+     */
     private void attackShowCards(Player Attacker, Player defender) {
         System.out.format("%s's cards: \n", defender.getName());
         defender.defendShowCards();
@@ -115,6 +130,10 @@ public class Game {
         Attacker.attackShowCards();
     }
 
+    /**
+     * This method is for repair one of the cards of one player.
+     * @param player This is the player that we want to repair one of his cards.
+     */
     private void repaire(Player player) {
         Random random = new Random();
         int index;
@@ -141,6 +160,13 @@ public class Game {
         }
     }
 
+    /**
+     * This method is for managing and choosing between two certain actions in the game: attack or repair.
+     * It shows the repair option to the player only when he can choose this option.(When the total number of his repairs is not 3 
+     * or when all of his cards are not full energy.)
+     * @param attacker 
+     * @param defender
+     */
     private void action(Player attacker, Player defender) {
         int choice;
         Random random = new Random();
@@ -205,7 +231,7 @@ public class Game {
     }
 
     /**
-     * This method is for attacking mode.
+     * This method is for attack action.
      * @param attacker The Player who wants to attack.
      * @param defender The player who has to defend
      * @param isPC // Boolean that we pass to the method to tell method that has to play random or not
@@ -220,7 +246,7 @@ public class Game {
         if (attacker.getIsPc()) {
             attackerCardsCount = random.nextInt(attacker.getCardsNumber()) + 1;
         } else {
-            System.out.printf("\nHow many cards do you want to attack with? ");
+            System.out.printf("\n%s! How many cards do you want to attack with? ", attacker.getName());
             attackerCardsCount = Main.input.nextInt();
         }
         for (int i = 0; i < attackerCardsCount; i++) { // adding n = attackerCardsCount cards to the arrayList
@@ -297,6 +323,9 @@ public class Game {
         return 1; 
     }
 
+    /**
+     * This method prints the winner of the game at the end of the game.
+     */
     private void endOfGamePrinter() {
         if (player1.getCardsNumber() == 0) {
             System.out.format("%s wins. Congratulations :))\n", player2.getName());
