@@ -12,6 +12,8 @@ public abstract class Film {
     private String director;
     private Age age;
     private ArrayList<String> actors;
+    private double rateSum;
+    private int rateCount;
 
 
     public Film(String name, String summary, Genre genre, String director, Age age, ArrayList<String> actors) {
@@ -21,6 +23,8 @@ public abstract class Film {
         this.director = director;
         this.age = age;
         this.actors = actors;
+        this.rateSum = 0;
+        this.rateCount = 0;
     }  
 
     public Age getAge() {
@@ -43,6 +47,7 @@ public abstract class Film {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("\n>>>>>>>>>>");
         stringBuilder.append("\nName: " + name);
+        stringBuilder.append("\nRate: " + getRate());
         stringBuilder.append("\nGenre: " + genre);
         stringBuilder.append("\nDirector: " + director);
         stringBuilder.append("\nSummary: " + summary);
@@ -53,5 +58,26 @@ public abstract class Film {
         return stringBuilder.toString();
     }
 
+    /**
+     * This method gets the rating number and updates the summand and the number
+     * of the rates for the film.
+     * @param rate
+     */
+    public void rate(int rate) {
+        rateSum += rate;
+        rateCount++;
+    }
+
+    /**
+     * This method returns the rate of the film in String format.
+     * @return
+     */
+    private String getRate() {
+        if (rateCount == 0) {
+            return "Nobody has rated this film yet!";
+        }
+        return String.format("%.2f", rateSum / rateCount);
+    }
+    
     public abstract void download();
 }
