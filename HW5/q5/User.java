@@ -123,6 +123,7 @@ public class User extends GeneralUser {
         }
         if (filmRates.containsKey(film)) {
             System.out.println("You have rated this film before!");
+            Main.pressEnter();
             return;
         }
         System.out.printf("> Your rate from 1 to 5: ");

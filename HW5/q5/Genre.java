@@ -17,6 +17,10 @@ public enum Genre {
     public static Genre genreChoice(String input) {
         Genre genre = null;
         while (true) {
+            if (input.equalsIgnoreCase("NONE")) {
+                genre = null;
+                return genre;
+            }
             for (Genre genre2 : Genre.values()) {
                 if (genre2.name().equalsIgnoreCase(input)) {
                     genre = genre2;

@@ -57,7 +57,7 @@ public abstract class GeneralUser {
         System.out.printf("If you want to show all films, type NONE\n> ");
         Site.scanner.nextLine();
         String choice = Site.scanner.nextLine();
-        if (choice.toUpperCase().equals("NONE")) {
+        if (choice.equalsIgnoreCase("NONE")) {
             getSiteManager().listByGenre(null);
             return;
         }

@@ -113,6 +113,12 @@ public class Site {
         String userName = scanner.nextLine();
         System.out.printf("> Password: ");
         String password = scanner.nextLine();
+        GeneralUser generalUser = searchUser(userName, password);
+        if (generalUser != null) {
+            System.out.println("There is a user with this exact information here. change your information!");
+            Main.pressEnter();
+            return;
+        }
         LocalDate joinDate = LocalDate.now();
         if (choice == 1) {
             System.out.printf("Do you want to be a VIP user? 1.YES  2.NO\n> ");
@@ -187,7 +193,7 @@ public class Site {
 
     private GeneralUser searchUser(String username, String password) {
         for (GeneralUser generalUser : users) {
-            if (generalUser.getUserName().equals(username) && generalUser.getPassword().equals(password)) {
+            if (generalUser.getUserName().equalsIgnoreCase(username) && generalUser.getPassword().equals(password)) {
                 return generalUser;
             }
         }
@@ -196,7 +202,7 @@ public class Site {
 
     public Film searchFilm(String name) {
         for (Film film : films) {
-            if (film.getName().equals(name)) {
+            if (film.getName().equalsIgnoreCase(name)) {
                 return film;
             }
         }
